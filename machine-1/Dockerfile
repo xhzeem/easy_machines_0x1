@@ -23,8 +23,13 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 # Configure FTP
 RUN mkdir -p /var/run/vsftpd/empty
 COPY vsftpd.conf /etc/vsftpd.conf
-RUN mkdir -p /srv/ftp/anonymous && chown ftp:ftp /srv/ftp/anonymous
+RUN mkdir -p /srv/ftp/anonymous/pub && \
+    chown root:root /srv/ftp/anonymous && \
+    chmod 555 /srv/ftp/anonymous && \
+    chown ftp:ftp /srv/ftp/anonymous/pub && \
+    chmod 777 /srv/ftp/anonymous/pub
 RUN echo "FLAG{ANON_FTP_L0G1N}" > /srv/ftp/anonymous/flag.txt
+RUN echo "Welcome to the anonymous FTP server. Check the pub/ directory for uploads." > /srv/ftp/anonymous/welcome.txt
 
 # Configure Nginx (Port 115 inside, but mapped to host)
 # Default nginx is on 80. We'll change it to 115 inside to avoid conflict with web app if we wanted, 
