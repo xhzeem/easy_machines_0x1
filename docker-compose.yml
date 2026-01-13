@@ -1,0 +1,74 @@
+services:
+  # Machine 1 (901x) - Infrastructure Health
+  machine-1:
+    build:
+      context: ./machine-1
+      dockerfile: Dockerfile
+    ports:
+      - "9011:80" # Web App RCE
+      - "9012:22" # SSH
+      - "9013:21" # FTP
+      - "9014:6379" # Redis
+      - "9015:115" # Nginx
+      - "21100-21110:21100-21110"
+    networks:
+      - lab-net
+
+  # Machine 2 (902x) - Secure Corporate Gateway
+  machine-2:
+    build:
+      context: ./machine-2
+      dockerfile: Dockerfile
+    ports:
+      - "9021:211" # PHP Backdoor
+      - "9022:3306" # MariaDB
+      - "9023:445" # SMB
+      - "9024:5432" # Postgres
+      - "9025:215" # Apache
+    networks:
+      - lab-net
+
+  # Machine 3 (903x) - Vision AI Analytics
+  machine-3:
+    build:
+      context: ./machine-3
+      dockerfile: Dockerfile
+    ports:
+      - "9031:3000" # Node RCE
+      - "9032:23" # Telnet
+      - "9033:27017" # MongoDB
+      - "9034:11211" # Memcached
+      - "9035:315" # Lighttpd
+    networks:
+      - lab-net
+
+  # Machine 4 (904x) - Global WP Ops
+  machine-4:
+    build:
+      context: ./machine-4
+      dockerfile: Dockerfile
+    ports:
+      - "9041:411" # WordPress CVE
+      - "9042:22" # SSH Weak Creds
+      - "9043:3306" # MySQL
+      - "9044:3000" # Grafana CVE
+      - "9045:415" # Nginx
+    networks:
+      - lab-net
+
+  # Machine 5 (905x) - Stellar ERP
+  machine-5:
+    build:
+      context: ./machine-5
+      dockerfile: Dockerfile
+    ports:
+      - "9051:511" # Laravel CVE
+      - "9052:22" # SSH
+      - "9053:8080" # Jenkins CVE
+      - "9054:5432" # Postgres
+      - "9055:6379" # Redis
+    networks:
+      - lab-net
+
+networks:
+  lab-net:
